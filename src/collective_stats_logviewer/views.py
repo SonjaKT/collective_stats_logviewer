@@ -1,7 +1,6 @@
 from flask import render_template
-from flask import Flask
-from flask import jsonify
-from model import db
+from flask import Flask, request, jsonify, json
+from model import db, app
 
 def init_db():
     """ Initialize the database """
@@ -13,14 +12,9 @@ class _DefaultSettings(object):
     SECRET_KEY = 'development key'
     DEBUG = True
 
-# create the application
-app = Flask(__name__)
+
 app.config.from_object(_DefaultSettings)
 del _DefaultSettings
-
-def init_db():
-    """ Initialize the database """
-    db.create_all()
 
 @app.route('/')
 @app.route('/index/')
@@ -47,3 +41,11 @@ def response_time_details():
     ]
     return jsonify(url=url, data=data)
 
+
+@app.route('/super_url/', methods=['POST'])
+def super_url():
+	if request.method == 'POST':
+		line = json.loads(request.json())["line"] 
+		line_number = json.loads(request.json())["line_number"]	
+		logs.do_it(line)
+    return jsonify(["success %d" %(line_number)])

@@ -10,7 +10,7 @@ class Loader(object):
 		self.machine_name = "Terminator"
 		self.results = []
 
-	def do_it(self):
+	def do_it():
 		for line in fileinput.input():
 			d = {"username": self.name, 
 				"api_key": self.api_key, 

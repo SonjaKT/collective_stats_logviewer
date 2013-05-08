@@ -45,6 +45,6 @@ def response_time_details():
 def super_url():
 	line = request.form["line"] 
 	line_number = request.form["line_number"]	
-	do_it(line)
+	#do_it(line)
 	return jsonify(line=None, line_number=line_number)
 

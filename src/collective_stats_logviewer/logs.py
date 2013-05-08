@@ -1,7 +1,6 @@
 import datetime
 import re
-from collective_stats_logviewer.model import Log
-
+from model import Log, db
 
 def do_it(line):
     first_request_time = None
@@ -15,17 +14,11 @@ def do_it(line):
 		match_result = re.match(pattern, line)
 		if match_result:
 			result =  match_result.groupdict()
-
-                    if not first_request_time:
-                        request_time = datetime.datetime.strptime(result['access_time'], 
-                                            "%Y-%m-%dT%H:%M:%S")
-                    else:
-                        request_time = datetime.datetime.strptime(result['access_time'], 
-                                            "%Y-%m-%dT%H:%M:%S")             
-                    id = result['url']
-                    l = Log(request_time, result['publisher_time'], result['traverse_time'], result['commit_time'], result['transform_time'],
-                        result['setstate_time'], result['total_object_loads'], result['object_loads_from_cache'], result['objects_modified'],
-                        result['action'], result['url'], result['start_RSS'], result['end_RSS'])
-                    
-                    session.add(l)
-                    session.commit()
+			if not first_request_time:
+				request_time = datetime.datetime.strptime(result['access_time'],"%Y-%m-%dT%H:%M:%S")
+			else:
+				request_time = datetime.datetime.strptime(result['access_time'], "%Y-%m-%dT%H:%M:%S")             
+			id = result['url']
+			l = Log(request_time, result['publisher_time'], result['traverse_time'], result['commit_time'], result['transform_time'], result['setstate_time'], result['total_object_loads'], result['object_loads_from_cache'], result['objects_modified'], result['action'], result['url'], result['start_RSS'], result['end_RSS'])
+			db.session.add(l)
+			db.session.commit()
